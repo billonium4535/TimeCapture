@@ -1,21 +1,23 @@
 import datetime
 import csv
 import tkinter as tk
-from tkinter import ttk
 
 # Define constants
 CONFIG_FILE = "./config.cfg"
 DATA_FILE = "./data.csv"
 AREA_OPTIONS = []
+ITEM_OPTIONS = []
 
 
 # Define a class to represent the GUI form
 class TimeCaptureForm:
     def __init__(self):
         # create the main window
+        self.radio_buttons = []
+        self.radioButton_selected_option = None
         self.root = tk.Tk()
         self.root.title("Time Capture Form")
-        self.root.geometry("400x300")
+        self.root.geometry("400x500")
         self.root.resizable(False, False)
 
         # create a label for current area
@@ -56,6 +58,25 @@ class TimeCaptureForm:
         selected_option = self.selected_option.get()
         if selected_option:
             self.area_label.config(text="Current area: {}".format(selected_option))
+            areaNumber = self.selected_option.get()
+            with open(CONFIG_FILE, "r") as areaFile:
+                areaReader = csv.reader(areaFile)
+                for areaRow in areaReader:
+                    if areaNumber in areaRow:
+                        try:
+                            next_line = next(areaReader)
+                            ITEM_OPTIONS.clear()
+                            for item in next_line:
+                                ITEM_OPTIONS.append(item)
+                        except StopIteration:
+                            pass
+            for button in self.radio_buttons:
+                button.destroy()
+            self.radioButton_selected_option = tk.StringVar(value=ITEM_OPTIONS[0])
+            for j, option in enumerate(ITEM_OPTIONS):
+                radioButton = tk.Radiobutton(self.root, text=option, variable=self.radioButton_selected_option, value=option)
+                radioButton.place(x=30, y=75 + (j * 20))
+                self.radio_buttons.append(radioButton)
         else:
             self.area_label.config(text="Current area: select current area")
 
@@ -77,6 +98,9 @@ class TimeCaptureForm:
         print("off")
         self.operator_entry.selection_clear()
 
+    def get_radioButton_selected_option(self):
+        return self.radioButton_selected_option.get()
+
 
 if __name__ == '__main__':
     with open(CONFIG_FILE, "r") as csvfile:
@@ -89,7 +113,6 @@ if __name__ == '__main__':
             if i % 2 == 0:
                 AREA_OPTIONS.append(str(row[0]))
 
-        print("area: {} operator: {}".format(current_area, current_operator))
-        print("Areas: {}".format(AREA_OPTIONS))
+    csvfile.close()
 
     app = TimeCaptureForm()
