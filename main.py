@@ -1,10 +1,11 @@
 import datetime
 import csv
+import os.path
 import tkinter as tk
 
 # Define constants
 CONFIG_FILE = "./config.cfg"
-data_file = None
+DATA_FILE = None
 AREA_OPTIONS = []
 ITEM_OPTIONS = []
 
@@ -204,7 +205,7 @@ class TimeCaptureForm:
             file.close()
 
             # replace the first line with the new operator name
-            config_line = "file " + data_file + ",area " + self.current_area + ",op " + operator_name + ",\n"
+            config_line = "file " + DATA_FILE + ",area " + self.current_area + ",op " + operator_name + ",\n"
             data[0] = config_line
 
             # write all lines to the config file
@@ -249,7 +250,7 @@ class TimeCaptureForm:
             self.total_paused_time = self.total_paused_time + self.elapsed_paused_time
 
         self.stop_time = datetime.datetime.now()
-        with open(data_file, "a", newline="") as csvfile:
+        with open(DATA_FILE, "a", newline="") as csvfile:
             csv_writer = csv.writer(csvfile)
             csv_writer.writerow(
                 [self.wo_entry.get(), self.operator_entry.get(), self.current_area, self.selected_item(),
@@ -309,21 +310,45 @@ class TimeCaptureForm:
             self.ptimer_label.config(text="")
 
 
+def close_box(root):
+    root.destroy()
+
+
+def error_message(error):
+    root = tk.Tk()
+    root.geometry("250x150")
+    root.title("Error")
+
+    label = tk.Label(root, text="Error: " + error, width=250, height=150)
+    label.place(relx=0.5, rely=0.5, anchor="center")
+
+    close_button = tk.Button(root, text="Close", command=lambda: close_box(root), width=10, height=1)
+    close_button.place(relx=0.5, rely=0.9, anchor="center")
+
+    root.mainloop()
+
+
 if __name__ == '__main__':
-    with open(CONFIG_FILE, "r") as cfgfile:
-        currentValues = cfgfile.readline().split(",")
-        string = currentValues[0]
-        data_file = string[5:]
-        string = currentValues[1]
-        current_area = string[5:]
-        string = currentValues[2]
-        current_operator = string[3:]
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, "r") as cfgfile:
+            currentValues = cfgfile.readline().split(",")
+            string = currentValues[0]
+            DATA_FILE = string[5:]
+            if os.path.exists(DATA_FILE):
+                string = currentValues[1]
+                current_area = string[5:]
+                string = currentValues[2]
+                current_operator = string[3:]
 
-        reader = csv.reader(cfgfile)
-        for i, row in enumerate(reader):
-            if i % 2 == 0:
-                AREA_OPTIONS.append(str(row[0]))
+                reader = csv.reader(cfgfile)
+                for i, row in enumerate(reader):
+                    if i % 2 == 0:
+                        AREA_OPTIONS.append(str(row[0]))
 
-    cfgfile.close()
+                cfgfile.close()
 
-    app = TimeCaptureForm()
+                app = TimeCaptureForm()
+            else:
+                error_message("Can't access data.csv")
+    else:
+        error_message("Can't access config.cfg")
