@@ -50,7 +50,7 @@ auto-py-to-exe
    2. Select the main.py file.
    3. Click the "One file" option under "Output Type".
    4. Click the "Window Based" option under "Console Window".
-   5. Click the "Browse" button next to the "Output File" field and select a location to save the compiled .exe file.
+   5. Click the "Browse" button next to the "Output File" field under "Settings" and select a location to save the compiled .exe file.
    6. Click on the "Additional Files" section and add the `config.cfg` and `data.csv` files.
    7. Click the "Convert .py to .exe" button at the bottom of the GUI.
 4. The .exe will be created in the folder you specified in step 3.v.
