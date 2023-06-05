@@ -227,8 +227,8 @@ class TimeCaptureForm:
         if self.radioButton_selected_option is None:
             self.error_message_text.config(text="Error: Please select an item.")
             an_error = True
-        if not (self.wo_entry.get().isnumeric()) or len(self.wo_entry.get()) != 6:
-            self.error_message_text.config(text="Error: WO needs to be 6 digit numeric")
+        if not (self.wo_entry.get().isnumeric()) or len(self.wo_entry.get()) != 5:
+            self.error_message_text.config(text="Error: WO needs to be 5 digit numeric")
             an_error = True
         if self.operator_entry.get() in ['Enter Name', '', None]:
             self.error_message_text.config(text="Error: Please enter a valid operator name.")
@@ -250,10 +250,11 @@ class TimeCaptureForm:
             self.total_paused_time = self.total_paused_time + self.elapsed_paused_time
 
         self.stop_time = datetime.datetime.now()
+        the_date = datetime.date.today()
         with open(DATA_FILE, "a", newline="") as csvfile:
             csv_writer = csv.writer(csvfile)
             csv_writer.writerow(
-                [self.wo_entry.get(), self.operator_entry.get(), self.current_area, self.selected_item(),
+                [self.wo_entry.get(), self.operator_entry.get(), self.current_area, self.selected_item(),the_date,
                  str(self.elapsed_time).split(".")[0], str(self.total_paused_time).split(".")[0]])
             csvfile.close()
 
@@ -324,6 +325,10 @@ def error_message(error):
 
     close_button = tk.Button(root, text="Close", command=lambda: close_box(root), width=10, height=1)
     close_button.place(relx=0.5, rely=0.9, anchor="center")
+
+    #auto-py-to-exe allows icon to be set for program but can't replace feather in window or windows taskbar
+    #this line doesn't seem to have any effect
+    root.iconbitmap(r"Tioga_icons.ico")
 
     root.mainloop()
 
