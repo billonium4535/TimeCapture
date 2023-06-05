@@ -2,7 +2,7 @@
 This program is a simple graphical user interface (GUI) designed to capture and track the time employees spend working on different tasks for the Tioga LTD company. The program allows employees to input their name and the area they are working in, as well as track the amount of time they spend on a particular task.
 
 ### To Do:
-1. Add Tioga logo as icon
+1. ~~Add Tioga logo as icon~~
 2. Read and write `config.cfg` and `data.csv` from an external server
 3. Full error check/bug fix
 
@@ -50,9 +50,10 @@ auto-py-to-exe
    2. Select the main.py file.
    3. Click the "One file" option under "Output Type".
    4. Click the "Window Based" option under "Console Window".
-   5. Click the "Browse" button next to the "Output File" field under "Settings" and select a location to save the compiled .exe file.
-   6. Click on the "Additional Files" section and add the `config.cfg` and `data.csv` files.
-   7. Click the "Convert .py to .exe" button at the bottom of the GUI.
+   5. Click the "Icon" menu and select the .ico.
+   6. Click the "Browse" button next to the "Output File" field under "Settings" and select a location to save the compiled .exe file.
+   7. Click on the "Additional Files" section and add the `TiogaIcon.ico`, `config.cfg` and `data.csv` files.
+   8. Click the "Convert .py to .exe" button at the bottom of the GUI.
 4. The .exe will be created in the folder you specified in step 3.v.
 
 ### Notes
