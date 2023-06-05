@@ -1,1 +1,7 @@
-WO,Op,Area,Activity,Time,Paused Time
+WO,Op,Area,Activity,Date,Time,Paused Time
+12345,Andy,TH,Pre-forming parts,19/05/2023,00:00:02,00:00:00
+12345,Andy,TH,Pre-forming parts,2023-05-22,0:00:02,0:00:00
+12345,Andy,TH,Pre-forming parts,2023-05-22,0:00:04,0:00:01
+11111,Andy,TH, Inspection,2023-05-23,0:00:06,0:00:02
+12345,Andy,SMT,item 1,2023-06-01,0:00:10,0:00:00
+12345,Andy,SMT,item 3,2023-06-01,0:00:02,0:00:00
