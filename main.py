@@ -56,7 +56,7 @@ class TimeCaptureForm:
         self.operator_entry.bind("<FocusIn>", self.clear_default_text)
         self.operator_entry.place(x=325, y=line)
 
-        # create a button to saveoperator name
+        # create a button to save operator name
         self.save_button = tk.Button(self.root, text="Save", command=self.save_operator_name)
         self.save_button.place(x=530, y=line)
 
@@ -114,7 +114,10 @@ class TimeCaptureForm:
         self.error_message_text = tk.Label(self.root, text="", anchor="e")
         self.error_message_text.place(x=310, y=560)
 
-        # set the intial state
+        # set window icon
+        self.root.iconbitmap(default="./TiogaIcon.ico")
+
+        # set the initial state
         self.set_state_idle()
 
         # run the main loop
@@ -171,13 +174,13 @@ class TimeCaptureForm:
         selected_option = self.selected_option.get()
         if selected_option:
             self.current_area = selected_option
-            areanumber = self.selected_option.get()
+            areaNumber = self.selected_option.get()
             with open(CONFIG_FILE, "r") as areaFile:
-                areareader = csv.reader(areaFile)
-                for arearow in areareader:
-                    if areanumber in arearow:
+                areaReader = csv.reader(areaFile)
+                for areaRow in areaReader:
+                    if areaNumber in areaRow:
                         try:
-                            next_line = next(areareader)
+                            next_line = next(areaReader)
                             ITEM_OPTIONS.clear()
                             for item in next_line:
                                 ITEM_OPTIONS.append(item)
@@ -254,7 +257,7 @@ class TimeCaptureForm:
         with open(DATA_FILE, "a", newline="") as csvfile:
             csv_writer = csv.writer(csvfile)
             csv_writer.writerow(
-                [self.wo_entry.get(), self.operator_entry.get(), self.current_area, self.selected_item(),the_date,
+                [self.wo_entry.get(), self.operator_entry.get(), self.current_area, self.selected_item(), the_date,
                  str(self.elapsed_time).split(".")[0], str(self.total_paused_time).split(".")[0]])
             csvfile.close()
 
@@ -326,17 +329,13 @@ def error_message(error):
     close_button = tk.Button(root, text="Close", command=lambda: close_box(root), width=10, height=1)
     close_button.place(relx=0.5, rely=0.9, anchor="center")
 
-    #auto-py-to-exe allows icon to be set for program but can't replace feather in window or windows taskbar
-    #this line doesn't seem to have any effect
-    root.iconbitmap(r"Tioga_icons.ico")
-
     root.mainloop()
 
 
 if __name__ == '__main__':
     if os.path.exists(CONFIG_FILE):
-        with open(CONFIG_FILE, "r") as cfgfile:
-            currentValues = cfgfile.readline().split(",")
+        with open(CONFIG_FILE, "r") as cfgFile:
+            currentValues = cfgFile.readline().split(",")
             string = currentValues[0]
             DATA_FILE = string[5:]
             if os.path.exists(DATA_FILE):
@@ -345,14 +344,17 @@ if __name__ == '__main__':
                 string = currentValues[2]
                 current_operator = string[3:]
 
-                reader = csv.reader(cfgfile)
+                reader = csv.reader(cfgFile)
                 for i, row in enumerate(reader):
                     if i % 2 == 0:
                         AREA_OPTIONS.append(str(row[0]))
 
-                cfgfile.close()
+                cfgFile.close()
+                if os.path.exists("./TiogaIcon.ico"):
+                    app = TimeCaptureForm()
 
-                app = TimeCaptureForm()
+                else:
+                    error_message("Can't access TiogaIcon.ico")
             else:
                 error_message("Can't access data.csv")
     else:
